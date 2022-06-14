@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+  <title>Phound Map</title>
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+  <meta name="robots" content="noindex, nofollow">
+  <meta name="googlebot" content="noindex, nofollow">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <link rel="stylesheet" type="text/css" href="/css/result-light.css">
+
+  <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.5.1/leaflet.js"></script>
+  <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.5.1/leaflet.css">
+  <script type="text/javascript" src="https://graphhopper.com/api/1/examples/dist/graphhopper-client.js?v=0.9.0-2"></script>
+  <script type="text/javascript" src="https://code.jquery.com/jquery-2.2.4.min.js"></script>
+
+  <!-- Material Design for Bootstrap fonts and icons -->
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700|Material+Icons">
+
+  <!-- Material Design for Bootstrap CSS -->
+  <link rel="stylesheet" href="https://unpkg.com/bootstrap-material-design@4.1.1/dist/css/bootstrap-material-design.min.css" integrity="sha384-wXznGJNEXNG1NFsbm0ugrLFMQPWswR3lds2VeinahP8N0zJw9VWSopbjv2x7WCvX" crossorigin="anonymous">
+
+  <style id="compiled-css" type="text/css">
+      #map {
+      height: 100%;
+      width: 100%;
+    }
+
+  </style>
+  <style media="screen">
+    body {
+      height: 100vh;
+      padding-top: 3.5rem;
+    }
+    .starter-template {
+      padding: 3rem 1.5rem;
+      text-align: center;
+    }
+
+    .bg-dark {
+     background-color:#1565C0!important
+    }
+    a.bg-dark:focus,
+    a.bg-dark:hover,
+    button.bg-dark:focus,
+    button.bg-dark:hover {
+     background-color:#0D47A1!important
+    }
+  </style>
+
+
+  <!-- TODO: Missing CoffeeScript 2 -->
+
+  <script type="text/javascript">
+    //<![CDATA[
+
+    window.onload=function(){
+
+	 	// We�ll add a tile layer to add to our map, in this case it�s a OSM tile layer.
+	 	// Creating a tile layer usually involves setting the URL template for the tile images
+	 	var osmUrl = 'https://{s}.tile.osm.org/{z}/{x}/{y}.png',
+	 	  osmAttrib = '&copy; <a href="https://openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+	 	  osm = L.tileLayer(osmUrl, {
+	 	    maxZoom: 18,
+	 	    attribution: osmAttrib
+	 	  });
+
+	 	// initialize the map on the "map" div with a given center and zoom
+        var route = {{ route | safe }} ;
+        var points = route['paths'][0]['points']['coordinates'];
+
+        var point1 = points[0];
+        var point2 = points[points.length - 1];
+        console.log(point1);
+        console.log(point2);
+        var long1 = point1[0];
+        var lat1= point1[1];
+        var long2 = point2[0];
+        var lat2 = point2[1];
+	 	var map = L.map('map').setView([lat1, long1], 12).addLayer(osm);
+
+	 	var ghRouting = new GraphHopper.Routing({
+	 	  key: "c9233b36-a5f6-4e05-a0e7-f1f8447f1cbb",
+	 	  host: "https://graphhopper.com/api/1/",
+	 	  vehicle: "car",
+	 	  elevation: false
+	 	});
+
+	 	ghRouting.addPoint(new GHInput(lat1,long1));
+	 	ghRouting.addPoint(new GHInput(lat2,long2));
+
+	 	var routingLayer = L.geoJson().addTo(map);
+	 	routingLayer.options = {
+	 	  style: {
+	 	    color: "#00cc33",
+	 	    "weight": 5,
+	 	    "opacity": 1
+	 	  }
+	 	};
+
+	 	ghRouting.doRequest()
+	 	  .then(function(json) {
+	 	    var path = json.paths[0];
+	 	    routingLayer.addData({
+	 	      "type": "Feature",
+	 	      "geometry": path.points
+	 	    });
+
+	 	  })
+	 	  .catch(function(err) {
+	 	    var str = "An error occured: " + err.message;
+	 	    $("#routing-response").text(str);
+	 	  });
+
+
+    }
+
+//]]></script>
+
+</head>
+<body>
+  <nav class="navbar navbar-expand-md navbar-dark bg-dark fixed-top" style="z-index: 500;">
+    <a class="navbar-brand" href="#">Phound</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarsExampleDefault" aria-controls="navbarsExampleDefault" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div class="collapse navbar-collapse" id="navbarsExampleDefault">
+      <ul class="navbar-nav mr-auto">
+        <li class="nav-item">
+          <a class="nav-link" href="/controller/{{ courier.controller.id }}/couriers">Courier List</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="/controller/{{ courier.controller.id }}">Create Route</a>
+        </li>
+      </ul>
+    </div>
+  </nav>
+  <!-- <main class="container" role="main">
+    <div class="starter-template"> -->
+      <div id="map"></div>
+    <!-- </div>
+  </main> -->
+
+
+
+  <script>
+    // tell the embed parent frame the height of the content
+    if (window.parent && window.parent.parent){
+      window.parent.parent.postMessage(["resultsFrame", {
+        height: document.body.getBoundingClientRect().height,
+        slug: "e159pajw"
+      }], "*")
+    }
+
+    // always overwrite window.name, in case users try to set it manually
+    window.name = "result"
+  </script>
+  <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+  <script src="https://unpkg.com/popper.js@1.12.6/dist/umd/popper.js" integrity="sha384-fA23ZRQ3G/J53mElWqVJEGJzU0sTs+SvzG8fXVWP+kJQ1lwFAOkcUOysnlKJC33U" crossorigin="anonymous"></script>
+  <script src="https://unpkg.com/bootstrap-material-design@4.1.1/dist/js/bootstrap-material-design.js" integrity="sha384-CauSuKpEqAFajSpkdjv3z9t8E7RlpJ1UP0lKM/+NdtSarroVKu069AlsRPKkFBz9" crossorigin="anonymous"></script>
+  <script>$(document).ready(function() { $('body').bootstrapMaterialDesign(); });</script>
+</body>
+</html>

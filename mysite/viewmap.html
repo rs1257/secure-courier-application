@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+  <title>Leaflet demo</title>
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+  <meta name="robots" content="noindex, nofollow">
+  <meta name="googlebot" content="noindex, nofollow">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+
+  <script
+    type="text/javascript"
+    src="/js/lib/dummy.js"
+    
+  ></script>
+
+    <link rel="stylesheet" type="text/css" href="/css/result-light.css">
+
+      <script type="text/javascript" src="http://cdn.leafletjs.com/leaflet-0.7.2/leaflet.js"></script>
+      <link rel="stylesheet" type="text/css" href="http://cdn.leafletjs.com/leaflet-0.7.2/leaflet.css">
+      <script type="text/javascript" src="https://graphhopper.com/api/1/examples/dist/graphhopper-client.js?v=0.9.0-2"></script>
+      <script type="text/javascript" src="https://code.jquery.com/jquery-2.2.4.min.js"></script>
+
+  <style id="compiled-css" type="text/css">
+      #map {
+  height: 500px;
+  width: 80%;
+}
+
+  </style>
+
+
+  <!-- TODO: Missing CoffeeScript 2 -->
+
+  <script type="text/javascript">
+//<![CDATA[
+
+    window.onload=function(){
+      
+	 	// We’ll add a tile layer to add to our map, in this case it’s a OSM tile layer.
+	 	// Creating a tile layer usually involves setting the URL template for the tile images
+	 	var osmUrl = 'http://{s}.tile.osm.org/{z}/{x}/{y}.png',
+	 	  osmAttrib = '&copy; <a href="http://openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+	 	  osm = L.tileLayer(osmUrl, {
+	 	    maxZoom: 18,
+	 	    attribution: osmAttrib
+	 	  });
+
+	 	// initialize the map on the "map" div with a given center and zoom
+	 	var map = L.map('map').setView([53.945966, -1.031543], 12).addLayer(osm);
+
+	 	var ghRouting = new GraphHopper.Routing({
+	 	  key: "c9233b36-a5f6-4e05-a0e7-f1f8447f1cbb",
+	 	  host: "https://graphhopper.com/api/1/",
+	 	  vehicle: "car",
+	 	  elevation: false
+	 	});
+	 	ghRouting.addPoint(new GHInput(53.945966, -1.031543));
+	 	ghRouting.addPoint(new GHInput(53.68374,10.173444));
+
+	 	var routingLayer = L.geoJson().addTo(map);
+	 	routingLayer.options = {
+	 	  style: {
+	 	    color: "#00cc33",
+	 	    "weight": 5,
+	 	    "opacity": 1
+	 	  }
+	 	};
+
+	 	ghRouting.doRequest()
+	 	  .then(function(json) {
+	 	    var path = json.paths[0];
+	 	    routingLayer.addData({
+	 	      "type": "Feature",
+	 	      "geometry": path.points
+	 	    });
+
+	 	  })
+	 	  .catch(function(err) {
+	 	    var str = "An error occured: " + err.message;
+	 	    $("#routing-response").text(str);
+	 	  });
+
+
+    }
+
+//]]></script>
+
+</head>
+<body>
+    <div id="map"></div>
+
+
+  
+  <script>
+    // tell the embed parent frame the height of the content
+    if (window.parent && window.parent.parent){
+      window.parent.parent.postMessage(["resultsFrame", {
+        height: document.body.getBoundingClientRect().height,
+        slug: "e159pajw"
+      }], "*")
+    }
+
+    // always overwrite window.name, in case users try to set it manually
+    window.name = "result"
+  </script>
+</body>
+</html>

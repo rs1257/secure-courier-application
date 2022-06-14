@@ -1,0 +1,63 @@
+<resources>
+    <string name="app_name">Phound</string>
+
+    <!-- Navigation drawer strings -->
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+    <string name="nav_header_title">GPIG A</string>
+    <string name="nav_header_subtitle">GPIGA@example.com</string>
+    <string name="nav_header_desc">Navigation header</string>
+    <string name="menu_home">Map</string>
+    <string name="menu_gallery">Tickets</string>
+    <string name="menu_slideshow">Check In</string>
+
+    <!-- Map strings -->
+    <string name="instructions_title">Instructions</string>
+
+    <!-- Check in screen strings -->
+    <string name="check_in_location_found">Location Found</string>
+    <string name="check_in_location_disabled">Location Services Disabled</string>
+    <string name="check_in_location_searching">Location Searching</string>
+    <string name="check_in_location_no_permission">Location Permission Not Granted</string>
+    <string name="check_in_location_incorrect">Location Incorrect</string>
+    <string name="check_in_location_correct">Location Correct</string>
+    <string name="check_in_network_connected">Network Connected</string>
+    <string name="check_in_network_not_connected">No Network Connection</string>
+    <string name="check_in_button">Check In</string>
+
+    <!-- Login in screen strings -->
+    <string name="login_button">Sign In</string>
+    <string name="login_email_hint">Email</string>
+    <string name="login_success">"Signed In!"</string>
+    <string name="login_help">"Login Help: "</string>
+    <string name="login_error">"Login Error: "</string>
+    <string name="login_failed">"Login Failed!"</string>
+    <string name="login_cancelled">"Login Cancelled!"</string>
+
+    <!-- Panic Screen strings -->
+    <string name="panic_missed_connection">Missed Connection</string>
+    <string name="panic_package_lost">Package Lost</string>
+    <string name="panic_tampering">Package Tampered With</string>
+    <string name="panic_urgent_assistance">Urgent Assistance Needed</string>
+
+
+    <!-- Settings Screen strings -->
+    <string name="server_ip">Server IP:</string>
+    <string name="server_port">Server Port:</string>
+    <string name="server_ip_hint">Server IP</string>
+    <string name="server_port_hint">Server port</string>
+    <string name="menu_settings">Settings</string>
+    <string name="default_ip">10.0.2.2</string>
+    <string name="default_port">8000</string>
+    <string name="apply_settings">Apply</string>
+
+    <!-- Biometric Screen strings -->
+    <string name="bio_title">Login</string>
+    <string name="bio_subtitle">Login to your account</string>
+    <string name="bio_description">Description Here</string>
+    <string name="bio_cancel">Cancel</string>
+    <string name="asset_statements">
+        [{
+        \"include\": \"https://tg0.uk:49300/.well-known/assetlinks.json\"
+        }]</string>
+</resources>
